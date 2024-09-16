@@ -1,8 +1,5 @@
 <?php
-//this is the main page for our Y website, 
-//it will display all posts from those we are trolling
-//as well as recommend people we should be trolling.
-//you can also post from here
+//displays all the details for a particular Y user
 ?>
 
 <!DOCTYPE html>
@@ -10,8 +7,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="DESC MISSING">
-    <meta name="author" content="Nick Taggart, nick.taggart@nbcc.ca">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
 
     <title>Y - Why use X when you can use Y!</title>
@@ -24,28 +21,7 @@
 	<!-- Bootstrap core JavaScript-->
     <script src="https://code.jquery.com/jquery-1.10.2.js" ></script>
 	
-	<script>
-	//just a little jquery to make the textbox appear/disappear like the real Twitter website does
-	$(document).ready(function() {
-		//hide the submit button on page load
-		$("#button").hide();
-		$("#tweet_form").submit(function() {
-			
-			$("#button").hide();
-		});
-		$("#myTweet").click( function() {			
-			this.attributes["rows"].nodeValue = 5;
-			$("#button").show();
-			
-		});//end of click event
-		$("#myTweet").blur( function() {			
-			this.attributes["rows"].nodeValue = 1;
-                        //$("#button").hide();
-
-		});//end of click event
-	});//end of ready event handler
-    
-	</script>
+	
   </head>
 
   <body>
@@ -56,8 +32,7 @@
       </button>
      
 
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
+      <ul class="navbar-nav mr-auto">
 		<li>
 		  <a class="navbar-brand" href="#"><img alt="Y Logo" src="images/y_logo.png" class="logo"></a>
 		  </li>
@@ -90,57 +65,53 @@
             </div>
           </li>  
         </ul>
-		
-        <form class="form-inline my-2 my-lg-0" action="search.php">
+        <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="text" placeholder="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
       </div>
     </nav>
+	
 	<BR><BR>
     <div class="container">
 		<div class="row">
 			<div class="col-md-3">
 				<div class="mainprofile img-rounded">
 				<div class="bold">
-				<img class="bannericons" alt="Elon Musk Silouette" src="images/profilepics/ElonSilouette.jpg">
-				<a href="userpage.php?user_id=">Jimmy Jones</a><BR></div>
+				<img class="bannericons" src="images/profilepics/ElonSilouette.jpg">
+				Jimmy Jones<BR></div>
 				<table>
 				<tr><td>
 				tweets</td><td>following</td><td>followers</td></tr>
 				<tr><td>0</td><td>0</td><td>0</td>
-				</tr></table><BR><BR><BR><BR><BR>
+				</tr></table>
+				<img class="icon" src="images/location_icon.jpg">New Brunswick
+				<div class="bold">Member Since:</div>
+				<div>jan 1, 2001</div>
 				</div><BR><BR>
+				
 				<div class="trending img-rounded">
-				<div class="bold">Trending</div>
+				<div class="bold">0 &nbsp;Followers you know<BR>
+				
+				</div>
 				</div>
 				
 			</div>
 			<div class="col-md-6">
 				<div class="img-rounded">
-					<form method="post" id="tweet_form" action="tweet_proc.php">
-					<div class="form-group">
-						<textarea class="form-control" name="myTweet" id="myTweet" rows="1" placeholder="What's on your mind?"></textarea>
-						<input type="submit" name="button" id="button" value="Send" class="btn btn-primary btn-lg btn-block login-button">
-						
-					</div>
-					</form>
+					
 				</div>
 				<div class="img-rounded">
-				<!--display list of tweets here-->
+				
 				</div>
 			</div>
 			<div class="col-md-3">
 				<div class="whoToTroll img-rounded">
 				<div class="bold">Who to Troll?<BR></div>
-				<!-- display people you may know here-->
-				
+								
 				
 				</div><BR>
-				<!--don't need this div for now 
-				<div class="trending img-rounded">
-				© 2024 Y
-				</div>-->
+				
 			</div>
 		</div> <!-- end row -->
     </div><!-- /.container -->
