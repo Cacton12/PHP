@@ -1,8 +1,8 @@
-<?php include("../connect.php"); ?>
+<?php include("connect.php"); ?>
 
 <?php
 //add code here to process the form and insert a new product record
-if (isset($_POST[""])) { //only run this if the form was submitted via POST
+if (isset($_POST["username"])) { //only run this if the form was submitted via POST
     $firstname = $_POST["firstname"];
     $lastname = $_POST["lastname"];
     $email = $_POST["email"];
@@ -20,17 +20,17 @@ if (isset($_POST[""])) { //only run this if the form was submitted via POST
     $password . "  " . $confirm . "  " . $phone . "  " . $address . "<BR>";
     $province . "  " . $postalCode . "  " . $url . "  " . $desc . "  " . $location . "<BR>"; //for debugging
     //AddRecord($con, $productId, $category, $description, $price);
-    UpdateRecord($con, $, $);
+    AddRecord($con, $firstname, $lastname, $email, $username, $password, $confirm, $phone, $address, $province, $postalCode, $url, $desc, $location);
 }
 else {
     echo "CAN'T ACCESS THIS PAGE DIRECTLY";
 }
 
 // Type-hinting will throw an exception if them type doesnt match
-function AddRecord($con, int $, $, $, $) {
+function AddRecord($con, $firstname, $lastname, $email, $username, $password, $confirm, $phone, $address, $province, $postalCode, $url, $desc, $location) {
     //insert statement
-    $sql = "INSERT INTO `products`(`ID`,`Category`,`Description`,`Image`,`Price`)VALUES
-        ($id, '$category', '$description', '', $price)";
+    $sql = "INSERT INTO users(first_name, last_name, screen_name, password, address, province, postal_code, contact_number, email, url, description, location, date_created, profile_pic) 
+            VALUES ('$firstname','$lastname','$username','$password','$address','$province','$postalCode','$phone','$email','$url','$desc','$location',NOW(), NULL)";
     echo $sql . "  SQL<BR>";  //for debugging
 
     //run the sql
@@ -43,24 +43,6 @@ function AddRecord($con, int $, $, $, $) {
     }
     echo $msg;
     //redirect the user back to the form
-    header("location:Chap27.php?message=$msg");
-}
-
-function UpdateRecord($con, $firstname, $lastname, $email, $username, $password, $confirm, $phone, $address, $province, $postalCode, $url, $desc, $location) {
-    //update statement
-    $sql = "UPDATE `users` SET `first_name`='[$firstname]',`last_name`='[$lastname]',`screen_name`='[$username]',`password`='[ $password]',`address`='[$address]',`province`='[value-7]',`postal_code`='[value-8]',`contact_number`='[value-9]',`email`='[value-10]',`url`='[value-11]',`description`='[value-12]',`location`='[value-13]'"
-    echo $sql . "  SQL<BR>";  //for debugging
-
-    //run the sql
-    mysqli_query($con, $sql);
-    if (mysqli_affected_rows($con) == 1) {
-        $msg = "Update successful";
-    }
-    else { //some kind of problem
-        $msg = "Update failed";
-    }
-    echo $msg;
-    //redirect the user back to the form
-    header("location:Chap27.php?message=$msg");
+    header("location:signup.php?message=$msg");
 }
 ?>
