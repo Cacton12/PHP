@@ -43,6 +43,6 @@ function AddRecord($con, $firstname, $lastname, $email, $username, $password, $c
     }
     echo $msg;
     //redirect the user back to the form
-    header("location:signup.php?message=$msg");
+    header("location:Login.php?message=$msg");
 }
 ?>
