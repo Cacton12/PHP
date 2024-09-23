@@ -1,32 +1,43 @@
 <?php
-echo rand(min: 1, max: 6) . "<br>";
-echo getrandmax() . "<br>";
+echo rand(1,6) . "<BR>";
+echo getrandmax() . "<BR>";
 
-function MultiplyNumbers($x, $y)
-{
+function MultiplyNumbers(int $x, int $y) { //type-hinting
     return $x * $y;
 }
 
-// & makes it by ref which passes memory location rather than the variable 
-function DisplayMessage(string &$message)
-{
-    $message = "AHHHHHHHHHHH";
-    echo $message . "<br>";
+//& makes it by ref so it passes the memory location
+function DisplayMessage(string &$msg) {
+    $msg = "Bonjour monde";//changing the value here will also change it in the 
+            //calling function because it is passed by ref
+    echo $msg . "<BR>";
+}
+//iterative method to solve the problem
+/*function Factorial (int $n) {
+    $result = 1;
+    for ($i=$n; $i>0; $i--) {
+        $result *= $i;
+    }
+    return $result;
+}*/
+
+//recursive solution 
+//recursive function call themselves
+//      must work towards a base case
+function Factorial (int $n) {    
+    return ($n == 1) ? 1 : $n * Factorial($n - 1); //one line!!!
+    /*if ($n ==1) return 1; //base case
+    else {
+        //echo $n . "<BR>";
+        return $n * Factorial ($n -1);
+    }*/
 }
 
-function Factorial(int $n)
-{
-    return ($n == 1) ? 1: $n * Factorial($n - 1);
-    // if ($n == 1) {
-    //     return 1;
-    // } else {
-    //     return $n * Factorial($n - 1);
-    // }
-}
-
-echo MultiplyNumbers(5, 10) . " Product<br>";
-$message = "Hello World";
-DisplayMessage($message);
-echo $message . " back in the main<br>";
-echo Factorial(7);
-
+//pass-by-value is the default
+echo MultiplyNumbers(5, 10) . "  product<BR>";
+$msg = "Hello world";
+DisplayMessage($msg);
+echo $msg . "  back in the main<br>";
+echo Factorial(6) . "<BR>";
+echo "Hello";
+?>
