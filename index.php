@@ -1,8 +1,13 @@
 <?php
+session_start();
+if(isset()){
+	header("location:Login.php");
+}
 //this is the main page for our Y website, 
 //it will display all posts from those we are trolling
 //as well as recommend people we should be trolling.
 //you can also post from here
+
 ?>
 
 <!DOCTYPE html>
@@ -108,3 +113,4 @@
     
   </body>
 </html>
+
