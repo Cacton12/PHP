@@ -15,7 +15,7 @@ $result = mysqli_query($con, $sql);
 if (mysqli_affected_rows($con) == 1) {
     $row = mysqli_fetch_assoc($result);
     $user_id = $row['user_id'];
-$_SESSION["user_id"] = $user_id;
+    $_SESSION["user_id"] = $user_id;
 
     $msg = "Login successful";
     header("location:Index.php?message=$msg");

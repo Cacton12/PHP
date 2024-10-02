@@ -12,6 +12,12 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+.follow{
+  color: yellow;
+  background-color: #000;
+  border-radius: 3px;
+}
+
 body {
   margin: 0;
 }

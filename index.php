@@ -1,8 +1,13 @@
+<?php include("connect.php"); ?>
 <?php
 session_start();
-if(isset()){
-	header("location:Login.php");
+
+if(!isset($_SESSION["user_id"])){
+	header("location: Login.php");
+	exit();
 }
+
+
 //this is the main page for our Y website, 
 //it will display all posts from those we are trolling
 //as well as recommend people we should be trolling.
@@ -22,7 +27,7 @@ if(isset()){
     <title>Y - Why use X when you can use Y!</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="includes/bootstrap.min.css" rel="stylesheet">
+    <link href="includes\bootstrap.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="includes/starter-template.css" rel="stylesheet">
@@ -92,9 +97,23 @@ if(isset()){
 				<div class="whoToTroll img-rounded">
 				<div class="bold">Who to Troll?<BR></div>
 				<!-- display people you may know here-->
-				
-				
-				</div><BR>
+				 <?php
+				 	$sql = "select * from users order by rand() limit 3";
+					 $rsProd = mysqli_query($con, $sql) or die();
+					 while ($rowProd = mysqli_fetch_array($rsProd)){
+						 $first_name = $rowProd["first_name"];
+						 $last_name = $rowProd["last_name"];
+						 $screen_name = $rowProd["screen_name"];
+						 if($rowProd["profile_pic"] != ""){
+							 $profile_pic = $rowProd["profile_pic"];
+						 }
+						 else{
+							 $profile_pic = 'Images\profilepics\ElonSilouette.jpg';
+						 }
+						 echo '<img  class="bannericons" src=' ."$profile_pic" . ' alt="">' . '<a href="userpage.php?user_id=' . $rowProd['user_id'] . '">' . $first_name . " " .$last_name . " " . '@' .$screen_name .'</a>' . '<br>'
+						 .'<form action="Follow_proc.php?user_id='. $rowProd['user_id'].'" method="post">' . '<button type="submit" class="follow">Follow</button>' . '</form>' . '<br>';;
+					 }
+				 ?>
 				<!--don't need this div for now 
 				<div class="trending img-rounded">
 				© 2024 Y
@@ -102,8 +121,6 @@ if(isset()){
 			</div>
 		</div> <!-- end row -->
     </div><!-- /.container -->
-
-	
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
