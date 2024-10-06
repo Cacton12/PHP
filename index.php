@@ -6,6 +6,7 @@ if(!isset($_SESSION["user_id"])){
 	header("location: Login.php");
 	exit();
 }
+$userId = $_SESSION['user_id'];
 
 
 //this is the main page for our Y website, 
@@ -98,7 +99,7 @@ if(!isset($_SESSION["user_id"])){
 				<div class="bold">Who to Troll?<BR></div>
 				<!-- display people you may know here-->
 				 <?php
-				 	$sql = "select * from users order by rand() limit 3";
+				 	$sql = $sql = "SELECT * FROM users WHERE user_id != '$userId' AND user_id NOT IN (SELECT to_id FROM follows WHERE from_id = '$userId') ORDER BY RAND() LIMIT 3";
 					 $rsProd = mysqli_query($con, $sql) or die();
 					 while ($rowProd = mysqli_fetch_array($rsProd)){
 						 $first_name = $rowProd["first_name"];
@@ -130,4 +131,3 @@ if(!isset($_SESSION["user_id"])){
     
   </body>
 </html>
-

@@ -33,7 +33,7 @@ CREATE TABLE `follows` (
   KEY `FK_follows2` (`to_id`),
   CONSTRAINT `FK_follows` FOREIGN KEY (`from_id`) REFERENCES `users` (`user_id`),
   CONSTRAINT `FK_follows2` FOREIGN KEY (`to_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +42,7 @@ CREATE TABLE `follows` (
 
 LOCK TABLES `follows` WRITE;
 /*!40000 ALTER TABLE `follows` DISABLE KEYS */;
+INSERT INTO `follows` VALUES (21,24,26);
 /*!40000 ALTER TABLE `follows` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,7 +128,7 @@ CREATE TABLE `users` (
   `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
   `profile_pic` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +137,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (20,'Colby','Acton','nick','hello','240 Dunns Crossing rd','New Brunswick','E3B 2A6','5065367494','Colbyacton20@gmail.com','https://www.youtube.com/','i like fish','here','2024-09-18 19:49:57',NULL),(21,'Colby','Acton','lick','hello','240 Dunns Crossing rd','New Brunswick','E3B 2A6','5065367494','Colbyacton20@gmail.com','https://www.youtube.com/','i like fish','here','2024-09-18 19:56:54',NULL),(22,'Colby','Acton','ahhhhh','Hello','240 Dunns Crossing rd','New Brunswick','E3B 2A6','5065367494','Cacton01@mynbcc.ca','https://www.youtube.com/','i like fish','here','2024-09-19 14:36:08',NULL),(23,'Colby','Acton','ahhhhh','hello','240 Dunns Crossing rd','New Brunswick','E3B 2A6','5065367494','Cacton01@mynbcc.ca','www.nbcc.ca','i like fish','here','2024-09-19 14:39:53',NULL);
+INSERT INTO `users` VALUES (24,'Bob','Chedder','bobbyboy','bob','smelly street','Nunavut','e4l 8y7','1234567891','bob@gmail.com','google.ca','i like fish','here','2024-10-02 19:11:13',NULL),(25,'notbob','notChedder','notbobbyboy','bob','smellier street','Prince Edward Island','e4l 8y9','1234567892','notbob@gmail.com','google.ca','i like fish','here','2024-10-02 19:11:57',NULL),(26,'Colby','Acton','chickenman123','bob','yes street','Ontario','e4l 8i3','1234567893','colbya@gmail.com','google.ca','i like fish','here','2024-10-02 19:12:52',NULL),(27,'roger','roger','bestDroidEver','roger','roger-roger street','Quebec','3P0 2R2','1234567895','starwars@gmail.com','google.ca','i like fish','here','2024-10-02 19:14:28',NULL),(28,'cool','man','coolmanvan','cool','cool street','Alberta','c0l 5k6','1234567896','coolman@gmail.com','google.ca','i like fish','here','2024-10-02 19:15:45',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -149,4 +150,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-19 11:49:53
+-- Dump completed on 2024-10-02 16:19:29
