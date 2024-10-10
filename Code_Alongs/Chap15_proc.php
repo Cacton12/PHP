@@ -24,7 +24,7 @@ if(isset($_POST["submit"])) {
         exit;
     }
     else {
-        $destFile = "../images/profilepics/" . $_FILES["photo"]["size"]
+        $destFile = "../images/profilepics/" . $_FILES["photo"]["size"];
         
     }
 }//end if
