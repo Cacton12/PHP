@@ -19,8 +19,10 @@ if (isset($_POST["username"])) { //only run this if the form was submitted via P
     echo $firstname . "  " . $lastname . "  " . $email . "  " . $username . "<BR>";
     $password . "  " . $confirm . "  " . $phone . "  " . $address . "<BR>";
     $province . "  " . $postalCode . "  " . $url . "  " . $desc . "  " . $location . "<BR>"; //for debugging
+
+    $encryptedPassword = password_hash($password, PASSWORD_DEFAULT);
     //AddRecord($con, $productId, $category, $description, $price);
-    AddRecord($con, $firstname, $lastname, $email, $username, $password, $confirm, $phone, $address, $province, $postalCode, $url, $desc, $location);
+    AddRecord($con, $firstname, $lastname, $email, $username, $encryptedPassword, $confirm, $phone, $address, $province, $postalCode, $url, $desc, $location);
 }
 else {
     echo "CAN'T ACCESS THIS PAGE DIRECTLY";

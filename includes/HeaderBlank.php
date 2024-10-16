@@ -6,7 +6,7 @@
       
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-			<a class="navbar-brand" href="index.html"><img src="images/y_logo.png" class="logo"></a>
+			<a class="navbar-brand" href="Login.php"><img src="images/y_logo.png" class="logo"></a>
 		
         
       </div>
