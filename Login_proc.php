@@ -18,19 +18,17 @@ if (mysqli_affected_rows($con) == 1) {
     $passwordInDB = $row['password'];
     $usernameInDB = $row['screen_name'];
     $_SESSION["user_id"] = $user_id;
-    if($usernameInDB == $username && password_verify($password, $passwordInDB)){
+    if ($usernameInDB == $username && password_verify($password, $passwordInDB)) {
         $msg = "Login successful";
         header("location:Index.php?message=$msg");
         exit();
-    }
-    else{
+    } else {
         echo "<script>
             alert('Incorrect username or password please try again');
             window.location.href = 'Login.php';
           </script>";
     }
-}
-else {
+} else {
     echo "<script>
             alert('Incorrect username or password please try again');
             window.location.href = 'Login.php';

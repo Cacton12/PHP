@@ -5,6 +5,14 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
+
+.tweet-icon {
+  width: 24px;  /* Adjust the width as needed */
+  height: 24px; /* Adjust the height as needed */
+  margin-right: 5px; /* Optional: space between icons */
+  vertical-align: middle; /* Align icons vertically with text */
+}
+
 html {
   font-family: sans-serif;
   line-height: 1.15;
