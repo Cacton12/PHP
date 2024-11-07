@@ -124,6 +124,7 @@ $userId = $_SESSION['user_id'];
 						FROM `tweets` t
 						JOIN `users` u ON t.user_id = u.user_id
 						ORDER BY t.date_created DESC";
+					//main querry
 					$rsProd = mysqli_query($con, $sql) or die(mysqli_error($con));
 					while ($rowProd = mysqli_fetch_array($rsProd)) {
 
@@ -155,13 +156,16 @@ $userId = $_SESSION['user_id'];
 							$rowProd['original_tweet_id'],
 							$rowProd['reply_to_tweet_id']
 						);
+						//querry for original user id and tweet text
 						if ($tweet->originalTweetId != null) {
-							$sql2 = "SELECT `user_id` FROM `tweets` WHERE `original_tweet_id` = $tweet->originalTweetId";
+							$sql2 = "SELECT `tweet_text`, `user_id`FROM `tweets` WHERE `tweet_id` = $tweet->originalTweetId";
 							$rsProd2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
 							if (mysqli_num_rows($rsProd2) > 0) {
 								$rowProd2 = mysqli_fetch_array($rsProd2);
 								$originalUserId = $rowProd2['user_id'];
+								$originalTweetText = $rowProd2['tweet_text'];
 							}
+							//querry for first name, last name, screen name from original post
 							$sql3 = "SELECT `first_name`, `last_name`, `screen_name`FROM `users` WHERE `user_id` = $originalUserId";
 							$rsProd3 = mysqli_query($con, $sql3) or die(mysqli_error($con));
 							if (mysqli_num_rows($rsProd3) > 0) {
@@ -181,7 +185,6 @@ $userId = $_SESSION['user_id'];
 						$tweet_time = new DateTime($date_created);
 						$now = new DateTime();
 						$interval = date_diff($now, $tweet_time);
-
 						// I stuggled with this but i ended up using this method of breaking down the DateInterval
 						//into year month day hour and minute so essentially it will go through the ifs for example
 						// if it is 5 years ago it will stop at the fist if, years, then hit the second if being
@@ -202,17 +205,21 @@ $userId = $_SESSION['user_id'];
 						echo '<div class="tweet">' .
 							'<img class="bannericons" src="' . $profile_pic . '" alt="Profile Picture">' .
 							'<strong>' . htmlspecialchars($user->FirstName . ' ' . $user->LastName) . '</strong> <span>@' . htmlspecialchars($user->UserName) . '</span><br>' .
-							'<p>' . htmlspecialchars($tweet->tweetText) . '</p>' .
-							'<span class="tweet-time">' . $time_text . '</span><br>';
-
-						if ($tweet->originalTweetId != null || $tweet->originalTweetId > 0) {
-							echo '<span class="original-tweet">Retweeted from: <strong>' . htmlspecialchars($original_first_name . ' ' . $original_last_name) . '</strong> <span>@' . htmlspecialchars($original_screen_name) . '</span></span><br>';
+							'<p>';
+						if ($tweet->originalTweetId != null) {
+							echo htmlspecialchars($originalTweetText);
+						} else {
+							echo htmlspecialchars($tweet->tweetText);
 						}
-
+						echo '</p>';
+						'<span class="tweet-time">' . $time_text . '</span><br>';
+						if ($tweet->originalTweetId != null || $tweet->originalTweetId > 0) {
+							echo '<span class="original-tweet">Original by: <strong>' . htmlspecialchars($original_first_name . ' ' . $original_last_name) . '</strong> <span>@' . htmlspecialchars($original_screen_name) . '</span></span><br>';
+						}
 						echo '<div class="tweet-icons">' .
 							'<a href="#"><img src="images/like.ico" alt="Like Icon" class="tweet-icon" style="width: 24px; height: 24px;"></a>' .
 							'<a href="#"><img src="images/reply.png" alt="Reply Icon" class="tweet-icon" style="width: 24px; height: 24px;"></a>' .
-							'<a href="retweet.php?tweet_id=' . $tweet->originalTweetId . '"><img src="images/retweet.png" alt="Retweet Icon" class="tweet-icon" style="width: 24px; height: 24px;"></a>' .
+							'<a href="retweet.php?tweet_id=' . $tweet->tweetId . '"><img src="images/retweet.png" alt="Retweet Icon" class="tweet-icon" style="width: 24px; height: 24px;"></a>' .
 							'</div>' .
 							'</div>' .
 							'<hr>';
