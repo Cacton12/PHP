@@ -1,4 +1,7 @@
-<?php include("connect.php"); ?>
+<?php 
+include("connect.php"); 
+include("Users.php");
+?>
 <?php
 //verify the user's login credentials. if they are valid redirect them to index.php/
 //if they are invalid send them back to login.php
@@ -14,17 +17,19 @@ $sql = "SELECT `user_id`, `first_name`, `last_name`, `screen_name`, `password`, 
 $result = mysqli_query($con, $sql);
 if (mysqli_affected_rows($con) == 1) {
     $row = mysqli_fetch_assoc($result);
-    $user_id = $row['user_id'];
-    $passwordInDB = $row['password'];
-    $usernameInDB = $row['screen_name'];
-    $_SESSION["user_id"] = $user_id;
-    if ($usernameInDB == $username && password_verify($password, $passwordInDB)) {
+    $user = new users(
+        $row['user_id'], $row['password'], $row['first_name'], $row['last_name'], $row['screen_name'], $row['email'], $row['contact_number'], $row['address'],
+        $row['postal_code'], $row['province'], $row['location'], $row['profile_pic'], $row['description'], $row['url']
+    );
+        $_SESSION["user_id"] = $user->userId; 
+    if ($user->UserName == $username && password_verify($password, $user->Password)) {
         $msg = "Login successful";
         header("location:Index.php?message=$msg");
         exit();
     } else {
         echo "<script>
-            alert('Incorrect username or password please try again');
+            alert('Incorrect username or password please try again || password: $password username: $username dbUsername: $user->screen_name dbpassword: $user->Password');
+            
             window.location.href = 'Login.php';
           </script>";
     }
