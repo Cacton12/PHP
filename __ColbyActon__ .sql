@@ -42,7 +42,6 @@ CREATE TABLE `follows` (
 
 LOCK TABLES `follows` WRITE;
 /*!40000 ALTER TABLE `follows` DISABLE KEYS */;
-INSERT INTO `follows` VALUES (21,24,26);
 /*!40000 ALTER TABLE `follows` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,13 +85,13 @@ CREATE TABLE `tweets` (
   `tweet_id` int(11) NOT NULL AUTO_INCREMENT,
   `tweet_text` varchar(280) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `original_tweet_id` int(11) NOT NULL DEFAULT 0,
-  `reply_to_tweet_id` int(11) NOT NULL DEFAULT 0,
+  `original_tweet_id` int(11) DEFAULT NULL,
+  `reply_to_tweet_id` int(11) DEFAULT NULL,
   `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`tweet_id`),
   KEY `FK_tweets` (`user_id`),
   CONSTRAINT `FK_tweets` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,6 +100,7 @@ CREATE TABLE `tweets` (
 
 LOCK TABLES `tweets` WRITE;
 /*!40000 ALTER TABLE `tweets` DISABLE KEYS */;
+INSERT INTO `tweets` VALUES (45,'hey man old ben here',39,NULL,NULL,'2024-11-05 20:03:27'),(46,'',38,45,NULL,'2024-11-05 20:06:32'),(47,'Heyyyyyyyy! old ben hows luke',38,NULL,NULL,'2024-11-05 20:07:10'),(48,'',39,47,NULL,'2024-11-05 20:07:23');
 /*!40000 ALTER TABLE `tweets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -128,7 +128,7 @@ CREATE TABLE `users` (
   `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
   `profile_pic` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +137,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (24,'Bob','Chedder','bobbyboy','bob','smelly street','Nunavut','e4l 8y7','1234567891','bob@gmail.com','google.ca','i like fish','here','2024-10-02 19:11:13',NULL),(25,'notbob','notChedder','notbobbyboy','bob','smellier street','Prince Edward Island','e4l 8y9','1234567892','notbob@gmail.com','google.ca','i like fish','here','2024-10-02 19:11:57',NULL),(26,'Colby','Acton','chickenman123','bob','yes street','Ontario','e4l 8i3','1234567893','colbya@gmail.com','google.ca','i like fish','here','2024-10-02 19:12:52',NULL),(27,'roger','roger','bestDroidEver','roger','roger-roger street','Quebec','3P0 2R2','1234567895','starwars@gmail.com','google.ca','i like fish','here','2024-10-02 19:14:28',NULL),(28,'cool','man','coolmanvan','cool','cool street','Alberta','c0l 5k6','1234567896','coolman@gmail.com','google.ca','i like fish','here','2024-10-02 19:15:45',NULL);
+INSERT INTO `users` VALUES (38,'nick','taggart','nick','$2y$10$0BzWdrH2t/ouJZYHW20sWeHc4WYykJaggYMUCTzy03ar5DnaR1XAu','house','Nunavut','h4j 1k5','123-123-1234','nicktaggart@gmail.com','','ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhh','','2024-10-16 19:03:15','38.jpg'),(39,'hello','there','oldBen','$2y$10$fZksQARo3w.ozXmboy2QbuRux7mvOzh99d.Xz8udmK9DzYOKHqQqa','sdagsdabab','Nunavut','E3B 1M4','123-123-1245','obiwan@gmail.com','youtube','i like fish','here','2024-10-21 12:31:47','39.png');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -150,4 +150,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-02 16:19:29
+-- Dump completed on 2024-11-07 16:17:28
