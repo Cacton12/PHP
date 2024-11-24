@@ -33,7 +33,7 @@ CREATE TABLE `follows` (
   KEY `FK_follows2` (`to_id`),
   CONSTRAINT `FK_follows` FOREIGN KEY (`from_id`) REFERENCES `users` (`user_id`),
   CONSTRAINT `FK_follows2` FOREIGN KEY (`to_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +42,7 @@ CREATE TABLE `follows` (
 
 LOCK TABLES `follows` WRITE;
 /*!40000 ALTER TABLE `follows` DISABLE KEYS */;
+INSERT INTO `follows` VALUES (23,38,39),(24,43,38),(25,38,43),(28,39,43);
 /*!40000 ALTER TABLE `follows` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +92,7 @@ CREATE TABLE `tweets` (
   PRIMARY KEY (`tweet_id`),
   KEY `FK_tweets` (`user_id`),
   CONSTRAINT `FK_tweets` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +101,7 @@ CREATE TABLE `tweets` (
 
 LOCK TABLES `tweets` WRITE;
 /*!40000 ALTER TABLE `tweets` DISABLE KEYS */;
-INSERT INTO `tweets` VALUES (45,'hey man old ben here',39,NULL,NULL,'2024-11-05 20:03:27'),(46,'',38,45,NULL,'2024-11-05 20:06:32'),(47,'Heyyyyyyyy! old ben hows luke',38,NULL,NULL,'2024-11-05 20:07:10'),(48,'',39,47,NULL,'2024-11-05 20:07:23');
+INSERT INTO `tweets` VALUES (45,'hey man old ben here',39,NULL,NULL,'2024-11-05 20:03:27'),(46,'',38,45,NULL,'2024-11-05 20:06:32'),(47,'Heyyyyyyyy! old ben hows luke',38,NULL,NULL,'2024-11-05 20:07:10'),(48,'',39,47,NULL,'2024-11-05 20:07:23'),(49,'cheese',38,NULL,NULL,'2024-11-21 21:29:29'),(50,'the rebellion is not cool',43,NULL,NULL,'2024-11-21 22:59:09'),(51,'nick',43,NULL,NULL,'2024-11-22 00:32:26');
 /*!40000 ALTER TABLE `tweets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -128,7 +129,7 @@ CREATE TABLE `users` (
   `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
   `profile_pic` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -137,7 +138,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (38,'nick','taggart','nick','$2y$10$0BzWdrH2t/ouJZYHW20sWeHc4WYykJaggYMUCTzy03ar5DnaR1XAu','house','Nunavut','h4j 1k5','123-123-1234','nicktaggart@gmail.com','','ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhh','','2024-10-16 19:03:15','38.jpg'),(39,'hello','there','oldBen','$2y$10$fZksQARo3w.ozXmboy2QbuRux7mvOzh99d.Xz8udmK9DzYOKHqQqa','sdagsdabab','Nunavut','E3B 1M4','123-123-1245','obiwan@gmail.com','youtube','i like fish','here','2024-10-21 12:31:47','39.png');
+INSERT INTO `users` VALUES (38,'nick','taggart','nick','$2y$10$0BzWdrH2t/ouJZYHW20sWeHc4WYykJaggYMUCTzy03ar5DnaR1XAu','house','Nunavut','h4j 1k5','123-123-1234','nicktaggart@gmail.com','','ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhh','','2024-10-16 19:03:15','38.jpg'),(39,'hello','there','oldBen','$2y$10$fZksQARo3w.ozXmboy2QbuRux7mvOzh99d.Xz8udmK9DzYOKHqQqa','sdagsdabab','Nunavut','E3B 1M4','123-123-1245','obiwan@gmail.com','youtube','i like fish','here','2024-10-21 12:31:47','39.png'),(43,'Dath','Vader','DarkLordRocks','$2y$10$gl249r.TvW3OT/tCLz71pum/Mpusd3YpA3.PyZl2/DdpDUKoCruci','240 Dunns Crossing rd','New Brunswick','E3B 2A6','123-123-1257','DarthVaderRules@gmail.com','google.ca','ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhh','here','2024-11-21 21:59:13','43.jpg');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -150,4 +151,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-07 16:17:28
+-- Dump completed on 2024-11-22 17:11:05

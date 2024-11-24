@@ -12,6 +12,30 @@ if (!isset($_SESSION["user_id"])) {
 }
 $userId = $_SESSION['user_id'];
 
+$sqlUser = "select * from users where user_id = $userId";
+$sqlTweet =  "SELECT t.*, u.first_name, u.last_name, u.profile_pic, u.screen_name
+        FROM tweets t
+        JOIN users u ON t.user_id = u.user_id
+        WHERE u.user_id = $userId
+        ORDER BY t.date_created DESC";
+
+
+$stmtUser = $con->stmt_init(); //initialize the prepared statement
+$stmtTweet = $con->stmt_init();
+
+//users
+$stmtUser->prepare($sqlUser);
+$stmtUser->execute();
+$resultsUser = $stmtUser->get_result()->fetch_assoc();;
+
+//tweets
+$stmtTweet->prepare($sqlTweet);
+$stmtTweet->execute();
+$resultsTweet = $stmtTweet->get_result();
+
+
+$stmtUser->close(); //close the statement
+$stmtTweet->close(); //close the statement
 
 //this is the main page for our Y website, 
 //it will display all posts from those we are trolling
@@ -85,7 +109,7 @@ $userId = $_SESSION['user_id'];
 						echo '<img class="bannericons" alt="Profile pic" src="' . $profile_pic . '">';
 
 						?>
-						<a href="userpage.php?user_id=">Jimmy Jones</a><BR>
+						<?php echo "<a href='userpage.php?user_id=" . $resultsUser["user_id"] . "'>" . $resultsUser["first_name"] . " " . $resultsUser["last_name"] . "</a>"; ?>
 					</div>
 					<table>
 						<tr>
@@ -95,11 +119,79 @@ $userId = $_SESSION['user_id'];
 							<td>followers</td>
 						</tr>
 						<tr>
-							<td>0</td>
-							<td>0</td>
-							<td>0</td>
+							<td>
+								<?php
+								$sqlTweetCount = "SELECT COUNT(*) AS tweet_count FROM tweets WHERE user_id = " . $resultsUser['user_id'];
+
+
+								$stmtTweetCount = $con->prepare($sqlTweetCount);
+								$stmtTweetCount->execute();
+								$resultTweetCount = $stmtTweetCount->get_result()->fetch_assoc();
+								$tweetCount = $resultTweetCount['tweet_count'];
+								$stmtTweetCount->close();
+
+								echo $tweetCount;
+								?>
+							</td>
+							<td>
+								<?php
+								$sqlFollowing = "SELECT COUNT(*) AS following FROM follows WHERE from_id = " . $resultsUser['user_id'];
+								$stmtFollowing = $con->prepare($sqlFollowing);
+								$stmtFollowing->execute();
+								$resultFollowing = $stmtFollowing->get_result()->fetch_assoc();
+								$Following = $resultFollowing['following'];
+								$stmtFollowing->close();
+
+								echo $Following;
+								?>
+							</td>
+							<td>
+								<?php
+								$sqlFollowers = "SELECT COUNT(*) AS followers FROM follows WHERE to_id = " . $resultsUser['user_id'];
+
+
+								$stmtFollowers = $con->prepare($sqlFollowers);
+								$stmtFollowers->execute();
+								$resultFollowers = $stmtFollowers->get_result()->fetch_assoc();
+								$Followers = $resultFollowers['followers'];
+								$stmtFollowers->close();
+
+								echo $Followers;
+								?>
+							</td>
 						</tr>
-					</table><BR><BR><BR><BR><BR>
+					</table>
+					<img class="icon" src="images/location_icon.jpg">
+					<?php
+					$sqlProvince = "SELECT province FROM users WHERE user_id = " . $resultsUser['user_id'];
+
+
+					$stmtProvince = $con->prepare($sqlProvince);
+					$stmtProvince->execute();
+					$resultProvince = $stmtProvince->get_result()->fetch_assoc();
+					$Province = $resultProvince['province'];
+					$stmtProvince->close();
+
+					echo $Province;
+					?>
+					<div class="bold">Member Since:</div>
+					<div>
+						<?php
+						$sqlDate = "SELECT date_created FROM users WHERE user_id = " . $resultsUser['user_id'];
+
+
+						$stmtDate = $con->prepare($sqlDate);
+						$stmtDate->execute();
+						$resultDate = $stmtDate->get_result()->fetch_assoc();
+						$Date = $resultDate['date_created'];
+						$stmtDate->close();
+
+						$dateTime = new DateTime($Date);
+						$formattedDate = $dateTime->format('F j, Y');
+
+						echo $formattedDate;
+						?>
+					</div>
 				</div><BR><BR>
 				<div class="trending img-rounded">
 					<div class="bold">Trending</div>
@@ -176,8 +268,8 @@ $userId = $_SESSION['user_id'];
 							}
 						}
 
-						if (!empty($user->profImage)) {
-							$profile_pic = "images/profilepics/" . $user->profImage;
+						if (!empty($rowProd["profile_pic"])) {
+							$profile_pic = "images/profilepics/" . $rowProd["profile_pic"];
 						} else {
 							$profile_pic = "images/profilepics/ElonSilouette.jpg";
 						}
@@ -204,18 +296,19 @@ $userId = $_SESSION['user_id'];
 						}
 						echo '<div class="tweet">' .
 							'<img class="bannericons" src="' . $profile_pic . '" alt="Profile Picture">' .
-							'<strong>' . htmlspecialchars($user->FirstName . ' ' . $user->LastName) . '</strong> <span>@' . htmlspecialchars($user->UserName) . '</span><br>' .
-							'<p>';
-						if ($tweet->originalTweetId != null) {
-							echo htmlspecialchars($originalTweetText);
-						} else {
-							echo htmlspecialchars($tweet->tweetText);
-						}
-						echo '</p>';
-						'<span class="tweet-time">' . $time_text . '</span><br>';
+							'<strong>' . htmlspecialchars($user->FirstName . ' ' . $user->LastName) . '</strong> ' .
+							'<a href="userpage.php?user_id=' . $user->userId . '">@' . htmlspecialchars($user->UserName) . '</a><br>' .
+							'<p>' .
+							($tweet->originalTweetId != null ? htmlspecialchars($originalTweetText) : htmlspecialchars($tweet->tweetText)) .
+							'</p>' .
+							'<span class="tweet-time">' . $time_text . '</span><br>';
+
 						if ($tweet->originalTweetId != null || $tweet->originalTweetId > 0) {
-							echo '<span class="original-tweet">Original by: <strong>' . htmlspecialchars($original_first_name . ' ' . $original_last_name) . '</strong> <span>@' . htmlspecialchars($original_screen_name) . '</span></span><br>';
+							echo '<span class="original-tweet">Original by: <strong>' .
+								'<a href="userpage.php?user_id=' . $originalUserId . '">' . $original_first_name . ' ' . $original_last_name . '</a>' .
+								'</strong> <a href="userpage.php?user_id=' . $originalUserId . '">@' . $original_screen_name . '</a></span><br>';
 						}
+
 						echo '<div class="tweet-icons">' .
 							'<a href="#"><img src="images/like.ico" alt="Like Icon" class="tweet-icon" style="width: 24px; height: 24px;"></a>' .
 							'<a href="#"><img src="images/reply.png" alt="Reply Icon" class="tweet-icon" style="width: 24px; height: 24px;"></a>' .
@@ -234,7 +327,7 @@ $userId = $_SESSION['user_id'];
 					<div class="bold">Who to Troll?<BR></div>
 					<!-- display people you may know here-->
 					<?php
-					$sql = $sql = "SELECT * FROM users WHERE user_id != '$userId' AND user_id NOT IN (SELECT to_id FROM follows WHERE from_id = '$userId') ORDER BY RAND() LIMIT 3";
+					$sql = "SELECT * FROM users WHERE user_id != '$userId' AND user_id NOT IN (SELECT to_id FROM follows WHERE from_id = '$userId') ORDER BY RAND() LIMIT 3";
 					$rsProd = mysqli_query($con, $sql) or die();
 					while ($rowProd = mysqli_fetch_array($rsProd)) {
 						$first_name = $rowProd["first_name"];

@@ -1,128 +1,353 @@
 <?php
-//displays all the details for a particular Y user
+include("connect.php");
+include("Users.php");
+include("tweet.php");
+?>
+<?php
+session_start();
+if (!isset($_SESSION["user_id"])) {
+    header("location: Login.php");
+    exit();
+}
+$userId = $_SESSION['user_id'];
+
+$selectedUser_id = isset($_GET['user_id']) ? (int)$_GET['user_id'] : 0;
+if ($selectedUser_id <= 0) {
+    header("index.php");
+    exit();
+}
+
+$sqlUser = "select * from users where user_id = $selectedUser_id";
+$sqlTweet =  "SELECT t.*, u.first_name, u.last_name, u.profile_pic, u.screen_name
+        FROM tweets t
+        JOIN users u ON t.user_id = u.user_id
+        WHERE u.user_id = $selectedUser_id
+        ORDER BY t.date_created DESC";
+
+
+$stmtUser = $con->stmt_init(); //initialize the prepared statement
+$stmtTweet = $con->stmt_init();
+
+//users
+$stmtUser->prepare($sqlUser);
+$stmtUser->execute();
+$resultsUser = $stmtUser->get_result()->fetch_assoc();;
+
+//tweets
+$stmtTweet->prepare($sqlTweet);
+$stmtTweet->execute();
+$resultsTweet = $stmtTweet->get_result();
+
+
+$stmtUser->close(); //close the statement
+$stmtTweet->close(); //close the statement
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
 
-    <title>Y - Why use X when you can use Y!</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="favicon.ico">
 
-    <!-- Bootstrap core CSS -->
-    <link href="includes/bootstrap.min.css" rel="stylesheet">
+  <title>Y - Why use X when you can use Y!</title>
 
-    <!-- Custom styles for this template -->
-    <link href="includes/starter-template.css" rel="stylesheet">
-	<!-- Bootstrap core JavaScript-->
-    <script src="https://code.jquery.com/jquery-1.10.2.js" ></script>
-	
-	
-  </head>
+  <!-- Bootstrap core CSS -->
+  <link href="includes/bootstrap.min.css" rel="stylesheet">
 
-  <body>
+  <!-- Custom styles for this template -->
+  <link href="includes/starter-template.css" rel="stylesheet">
+  <!-- Bootstrap core JavaScript-->
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 
-    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-     
 
-      <ul class="navbar-nav mr-auto">
-		<li>
-		  <a class="navbar-brand" href="#"><img alt="Y Logo" src="images/y_logo.png" class="logo"></a>
-		  </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="index.php">
-			<img class="bannericons" alt="Home Icon" src="images/home.jfif">Home<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-			<img class="bannericons" alt="Trending Icon" src="images/lightning.png">Moments</a>
-          </li>
-		  <li class="nav-item">
-            <a class="nav-link" href="#">
-			<img class="bannericons" alt="notification icon" src="images/bell.png">Notifications</a>
-          </li>
-		  <li class="nav-item">
-            <a class="nav-link" href="#">
-			<img class="bannericons" alt="Messages Icon" src="images/messages.png">Messages</a>
-          </li>
-          
-		  
-		  <li class="nav-item dropdown right">
-            <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<img class="profilepic" alt="Elon Musk Silouette" src="images/profilepics/ElonSilouette.jpg">
-			</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="logout.php">Logout</a>
-              <a class="dropdown-item" href="edit_photo.php">Edit Profile Picture</a>
-              
-            </div>
-          </li>  
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+</head>
+
+<body>
+  <?php include("Includes/header.php"); ?>
+
+  <BR><BR>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="mainprofile img-rounded">
+          <div class="bold">
+          <img class="bannericons" src="<?php echo $profile_pic; ?>" alt="Profile Picture">
+            <?php echo "<a href='userpage.php?user_id=" . $resultsUser["user_id"] . "'>" . $resultsUser["first_name"] . " " . $resultsUser["last_name"] . "</a>"; ?>
+            <BR>
+          </div>
+          <table>
+            <tr>
+              <td>
+                tweets</td>
+              <td>following</td>
+              <td>followers</td>
+            </tr>
+            <tr>
+              <td>
+                <?php
+                $sqlTweetCount = "SELECT COUNT(*) AS tweet_count FROM tweets WHERE user_id = " . $resultsUser['user_id'];
+
+
+                $stmtTweetCount = $con->prepare($sqlTweetCount);
+                $stmtTweetCount->execute();
+                $resultTweetCount = $stmtTweetCount->get_result()->fetch_assoc();
+                $tweetCount = $resultTweetCount['tweet_count'];
+                $stmtTweetCount->close();
+
+                echo $tweetCount;
+                ?>
+              </td>
+              <td>
+                <?php
+                $sqlFollowing = "SELECT COUNT(*) AS following FROM follows WHERE from_id = " . $resultsUser['user_id'];
+                $stmtFollowing = $con->prepare($sqlFollowing);
+                $stmtFollowing->execute();
+                $resultFollowing = $stmtFollowing->get_result()->fetch_assoc();
+                $Following = $resultFollowing['following'];
+                $stmtFollowing->close();
+
+                echo $Following;
+                ?>
+              </td>
+              <td>
+                <?php
+                $sqlFollowers = "SELECT COUNT(*) AS followers FROM follows WHERE to_id = " . $resultsUser['user_id'];
+
+
+                $stmtFollowers = $con->prepare($sqlFollowers);
+                $stmtFollowers->execute();
+                $resultFollowers = $stmtFollowers->get_result()->fetch_assoc();
+                $Followers = $resultFollowers['followers'];
+                $stmtFollowers->close();
+
+                echo $Followers;
+                ?>
+              </td>
+            </tr>
+          </table>
+          <img class="icon" src="images/location_icon.jpg">
+          <?php
+          $sqlProvince = "SELECT province FROM users WHERE user_id = " . $resultsUser['user_id'];
+
+
+          $stmtProvince = $con->prepare($sqlProvince);
+          $stmtProvince->execute();
+          $resultProvince = $stmtProvince->get_result()->fetch_assoc();
+          $Province = $resultProvince['province'];
+          $stmtProvince->close();
+
+          echo $Province;
+          ?>
+          <div class="bold">Member Since:</div>
+          <div>
+            <?php
+            $sqlDate = "SELECT date_created FROM users WHERE user_id = " . $resultsUser['user_id'];
+
+
+            $stmtDate = $con->prepare($sqlDate);
+            $stmtDate->execute();
+            $resultDate = $stmtDate->get_result()->fetch_assoc();
+            $Date = $resultDate['date_created'];
+            $stmtDate->close();
+
+            $dateTime = new DateTime($Date);
+            $formattedDate = $dateTime->format('F j, Y');
+
+            echo $formattedDate;
+            ?>
+          </div>
+        </div><BR><BR>
+
+        <div class="trending img-rounded">
+          <div class="bold"><?php echo $Following ?> &nbsp;Followers you know<BR>
+            <?php $sql = "SELECT u.* FROM users u JOIN follows f ON f.to_id = u.user_id WHERE u.user_id != '{$resultsUser['user_id']}' AND f.from_id = '{$resultsUser['user_id']}' ORDER BY RAND() LIMIT 3";
+
+            $rsProd = mysqli_query($con, $sql) or die();
+            while ($rowProd = mysqli_fetch_array($rsProd)) {
+              $first_name = $rowProd["first_name"];
+              $last_name = $rowProd["last_name"];
+              $screen_name = $rowProd["screen_name"];
+              if (!empty($rowProd["profile_pic"])) {
+                $profile_pic = "images/profilepics/" . $rowProd["profile_pic"];
+              } else {
+                $profile_pic = "images/profilepics/ElonSilouette.jpg";
+              }
+
+              echo '<img class="bannericons" src="' . $profile_pic . '" alt="Profile Picture">' .
+                '<a href="userpage.php?user_id=' . $rowProd['user_id'] . '">' .
+                $first_name . " " . $last_name . " @" . $screen_name .
+                '</a><br><br>';
+            }
+            ?>
+          </div>
+        </div>
+
       </div>
-    </nav>
-	
-	<BR><BR>
-    <div class="container">
-		<div class="row">
-			<div class="col-md-3">
-				<div class="mainprofile img-rounded">
-				<div class="bold">
-				<img class="bannericons" src="images/profilepics/ElonSilouette.jpg">
-				Jimmy Jones<BR></div>
-				<table>
-				<tr><td>
-				tweets</td><td>following</td><td>followers</td></tr>
-				<tr><td>0</td><td>0</td><td>0</td>
-				</tr></table>
-				<img class="icon" src="images/location_icon.jpg">New Brunswick
-				<div class="bold">Member Since:</div>
-				<div>jan 1, 2001</div>
-				</div><BR><BR>
-				
+      <div class="col-md-6">
+        <div class="img-rounded">
+          <div class="tweets">
+            <?php
+            $LoopCounter = 0;
+
+            while ($rowProd = mysqli_fetch_array($resultsTweet)) {
+
+              if ($LoopCounter > 10) {
+                break;
+              }
+
+              $user = new users(
+                $rowProd['user_id'],
+                null,
+                $rowProd['first_name'],
+                $rowProd['last_name'],
+                $rowProd['screen_name'],
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                $rowProd['profile_pic'],
+                null,
+                null
+              );
+              $tweet = new tweet(
+                $rowProd['tweet_id'],
+                $rowProd['tweet_text'],
+                $rowProd['user_id'],
+                $rowProd['date_created'],
+                $rowProd['original_tweet_id'],
+                $rowProd['reply_to_tweet_id']
+              );
+              //querry for original user id and tweet text
+              if ($tweet->originalTweetId != null) {
+                $sql2 = "SELECT `tweet_text`, `user_id`FROM `tweets` WHERE `tweet_id` = $tweet->originalTweetId";
+                $rsProd2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
+                if (mysqli_num_rows($rsProd2) > 0) {
+                  $rowProd2 = mysqli_fetch_array($rsProd2);
+                  $originalUserId = $rowProd2['user_id'];
+                  $originalTweetText = $rowProd2['tweet_text'];
+                }
+                //querry for first name, last name, screen name from original post
+                $sql3 = "SELECT `first_name`, `last_name`, `screen_name`FROM `users` WHERE `user_id` = $originalUserId";
+                $rsProd3 = mysqli_query($con, $sql3) or die(mysqli_error($con));
+                if (mysqli_num_rows($rsProd3) > 0) {
+                  $rowProd3 = mysqli_fetch_array($rsProd3);
+                  $original_first_name = $rowProd3['first_name'];
+                  $original_last_name = $rowProd3['last_name'];
+                  $original_screen_name = $rowProd3['screen_name'];
+                }
+              }
+
+              if (!empty($rowProd["profile_pic"])) {
+                $profile_pic = "images/profilepics/" . $rowProd["profile_pic"];
+              } else {
+                $profile_pic = "images/profilepics/ElonSilouette.jpg";
+              }
+              $date_created = $user->DateAdded;
+              $tweet_time = new DateTime($date_created);
+              $now = new DateTime();
+              $interval = date_diff($now, $tweet_time);
+              // I stuggled with this but i ended up using this method of breaking down the DateInterval
+              //into year month day hour and minute so essentially it will go through the ifs for example
+              // if it is 5 years ago it will stop at the fist if, years, then hit the second if being
+              // ($interval->y > 1 ? "s" : "") which adds a s if it was more than one year ago 
+              if ($interval->y > 0) {
+                $time_text = $interval->y . " year" . ($interval->y > 1 ? "s" : "") . " ago";
+              } elseif ($interval->m > 0) {
+                $time_text = $interval->m . " month" . ($interval->m > 1 ? "s" : "") . " ago";
+              } elseif ($interval->d > 0) {
+                $time_text = $interval->d . " day" . ($interval->d > 1 ? "s" : "") . " ago";
+              } elseif ($interval->h > 0) {
+                $time_text = $interval->h . " hour" . ($interval->h > 1 ? "s" : "") . " ago";
+              } elseif ($interval->i > 0) {
+                $time_text = $interval->i . " minute" . ($interval->i > 1 ? "s" : "") . " ago";
+              } else {
+                $time_text = "Just now";
+              }
+              echo '<div class="tweet">' .
+                '<img class="bannericons" src="' . $profile_pic . '" alt="Profile Picture">' .
+                '<strong>' . htmlspecialchars($user->FirstName . ' ' . $user->LastName) . '</strong> ' .
+                '<a href="userpage.php?user_id=' . $user->userId . '">@' . htmlspecialchars($user->UserName) . '</a><br>' .
+                '<p>' .
+                ($tweet->originalTweetId != null ? htmlspecialchars($originalTweetText) : htmlspecialchars($tweet->tweetText)) .
+                '</p>' .
+                '<span class="tweet-time">' . $time_text . '</span><br>';
+
+              if ($tweet->originalTweetId != null || $tweet->originalTweetId > 0) {
+                echo '<span class="original-tweet">Original by: <strong>' .
+                  '<a href="userpage.php?user_id=' . $originalUserId . '">' . $original_first_name . ' ' . $original_last_name . '</a>' .
+                  '</strong> <a href="userpage.php?user_id=' . $originalUserId . '">@' . $original_screen_name . '</a></span><br>';
+              }
+
+              echo '<div class="tweet-icons">' .
+                '<a href="#"><img src="images/like.ico" alt="Like Icon" class="tweet-icon" style="width: 24px; height: 24px;"></a>' .
+                '<a href="#"><img src="images/reply.png" alt="Reply Icon" class="tweet-icon" style="width: 24px; height: 24px;"></a>' .
+                '<a href="retweet.php?tweet_id=' . $tweet->tweetId . '"><img src="images/retweet.png" alt="Retweet Icon" class="tweet-icon" style="width: 24px; height: 24px;"></a>' .
+                '</div>' .
+                '</div>' .
+                '<hr>';
+
+
+
+
+              $LoopCounter++;
+            }
+            ?>
+          </div>
+        </div>
+        <div class="img-rounded">
+
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="whoToTroll img-rounded">
+        <div class="bold">Who to Troll?<BR></div>
+					<!-- display people you may know here-->
+					<?php
+					$sql = "SELECT * FROM users WHERE user_id != '$userId' AND user_id NOT IN (SELECT to_id FROM follows WHERE from_id = '$userId') ORDER BY RAND() LIMIT 3";
+					$rsProd = mysqli_query($con, $sql) or die();
+					while ($rowProd = mysqli_fetch_array($rsProd)) {
+						$first_name = $rowProd["first_name"];
+						$last_name = $rowProd["last_name"];
+						$screen_name = $rowProd["screen_name"];
+						if (!empty($rowProd["profile_pic"])) {
+							$profile_pic = "images/profilepics/" . $rowProd["profile_pic"];
+						} else {
+							$profile_pic = "images/profilepics/ElonSilouette.jpg";
+						}
+
+						echo '<img class="bannericons" src="' . $profile_pic . '" alt="Profile Picture">' .
+							'<a href="userpage.php?user_id=' . $rowProd['user_id'] . '">' .
+							$first_name . " " . $last_name . " @" . $screen_name .
+							'</a><br>' .
+							'<form action="Follow_proc.php?user_id=' . $rowProd['user_id'] . '" method="post">' .
+							'<button type="submit" class="follow">Follow</button>' .
+							'</form><br>';
+					}
+					?>
+					<!--don't need this div for now 
 				<div class="trending img-rounded">
-				<div class="bold">0 &nbsp;Followers you know<BR>
-				
+				© 2024 Y
+				</div>-->
 				</div>
-				</div>
-				
-			</div>
-			<div class="col-md-6">
-				<div class="img-rounded">
-					
-				</div>
-				<div class="img-rounded">
-				
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="whoToTroll img-rounded">
-				<div class="bold">Who to Troll?<BR></div>
-								
-				
-				</div><BR>
-				
-			</div>
-		</div> <!-- end row -->
-    </div><!-- /.container -->
+      </div>
+    </div> <!-- end row -->
+  </div><!-- /.container -->
 
-	
 
-    <!-- Bootstrap core JavaScript
+
+  <!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-    <script src="includes/bootstrap.min.js"></script>
-    
-  </body>
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="includes/bootstrap.min.js"></script>
+
+</body>
+
 </html>

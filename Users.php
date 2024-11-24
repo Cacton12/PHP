@@ -1,5 +1,6 @@
 <?php
-class users {
+class users
+{
     private $userId;
     private $Password;
     private $LastName;
@@ -16,17 +17,20 @@ class users {
     private $profImage;
     private $description;
 
-    public function __get($property) {
+    public function __get($property)
+    {
         // This will return any private data member
         return $this->$property;
     }
 
-    public function __set($property, $value) {
+    public function __set($property, $value)
+    {
         $this->$property = $value;
     }
 
     // Constructor with parameters for initializing user properties
-    public function __construct($userId, $Password, $FirstName, $LastName, $UserName, $email, $ContactNo, $Address, $postalCode, $Province, $Location, $profImage, $description, $url) {
+    public function __construct($userId, $Password, $FirstName, $LastName, $UserName, $email, $ContactNo, $Address, $postalCode, $Province, $Location, $profImage, $description, $url)
+    {
         $this->userId = $userId;
         $this->Password = $Password;
         $this->FirstName = $FirstName;
@@ -44,19 +48,19 @@ class users {
         $this->DateAdded = date("Y-m-d H:i:s");
     }
 
-    public function toString() {
-        return "User ID: " . $this->userId . 
-               " | Name: " . $this->FirstName . " " . $this->LastName . 
-               " | Email: " . $this->email . 
-               " | Contact No: " . $this->ContactNo . 
-               " | Address: " . $this->Address . 
-               " | Postal Code: " . $this->postalCode . 
-               " | Province: " . $this->Province . 
-               " | Location: " . $this->Location . 
-               " | Profile Image: " . $this->profImage . 
-               " | Description: " . $this->description . 
-               " | URL: " . $this->url . 
-               " | Date Added: " . $this->DateAdded . "<BR>";
+    public function toString()
+    {
+        return "User ID: " . $this->userId .
+            " | Name: " . $this->FirstName . " " . $this->LastName .
+            " | Email: " . $this->email .
+            " | Contact No: " . $this->ContactNo .
+            " | Address: " . $this->Address .
+            " | Postal Code: " . $this->postalCode .
+            " | Province: " . $this->Province .
+            " | Location: " . $this->Location .
+            " | Profile Image: " . $this->profImage .
+            " | Description: " . $this->description .
+            " | URL: " . $this->url .
+            " | Date Added: " . $this->DateAdded . "<BR>";
     }
 }
-?>
