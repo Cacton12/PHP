@@ -30,28 +30,34 @@ if ($resource === 'users') {
 } else {
     echo json_encode(['error' => 'Invalid request']);
 }
-switch ($requestMethod){
-    case 'GET':
-        if($id){
+switch ($requestMethod) {
+    case 'GET':  //read
+        if ($id) {
             echo json_encode($users[$id]);
         }
         break;
-    case 'POST':
-        $input = json_decode(file_get_contents("php://input"), true);
-        $newId = count($users) + 1;
-        $users[$newId] = ['id'=> $newId] + $input;
+    case 'POST': //create or insert
+        $input = json_decode(file_get_contents('php://input'), true);
+        $newId = count($users) + 1; //get a new id
+        $users[$newId] = ['id' => $newId] + $input;
         echo json_encode(['message' => 'User Created']);
         break;
-    case 'PUT':
-        $input = json_decode(file_get_contents("php://input"), true);
-        $users[$id] = ['id'=> $id] + $input;
-        echo json_encode(['message' => 'User updated worked','<br>', 'user' => $users[$id]]);
+    case 'PUT': //update
+        $input = json_decode(file_get_contents('php://input'), true);
+        $users[$id] = ['id' => $id] + $input;
+        echo json_encode(['message' => 'User updated successfully', 
+            'user'=> $users[$id] ]);
         break;
-    case 'DELETE': 
-        unset($users[$id]);
-        echo json_encode(['message' => 'User deleted']);
+    case 'DELETE':  //delete
+        if ($id) {
+            unset($users[$id]);
+            echo json_encode(['message' => 'User Deleted successfully']);
+        }
+        else {
+            echo json_encode(['message' => 'User ID is required']);
+        }
         break;
     default:
-        echo json_encode(['error' => 'invalid request']);
+        echo json_encode(['error' => 'Invalid request']);
         break;
-}
+}//end switch
