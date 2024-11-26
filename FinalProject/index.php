@@ -32,7 +32,7 @@
     </div>
 </div>
 <div class="row">
-    <label class="col-sm-2">Clue&nbsp;</label>
+    <label class="col-sm-2">Clue&nbsp; </label>
     <div class="col-sm-10">
         <label id="lblClue" class="cols-sm-2"></label>        		
     </div>
@@ -55,9 +55,16 @@
 <div class="row">
     <label class="col-sm-2 control-label">Your Score&nbsp;</label>
     <div class="col-sm-5">        
-        <label id="lblScore"></label>&nbsp;
+        <label id="lblScore"></label>&nbsp;<br>
         <input type="button" onclick="ResetScore()" name="button" id="button" value="Reset Score" class="btn btn-primary btn-sm login-button"/>
     </div>
-</div>    
+</div>  
+<div class="row">
+    <label class="col-sm-2 control-label">Hint&nbsp;</label>  <!-- Added space for alignment -->
+    <div class="col-sm-5">  
+        <label id="lblHint"></label>&nbsp;<br>  
+        <input type="button" onclick="ShowHint()" name="button" id="btnHint" value="Show Hint" class="btn btn-primary btn-sm login-button"/>
+    </div>
+</div>  
   </body>
 </html>

@@ -5,7 +5,9 @@ $url = 'http://cluebase.lukelav.in/clues/random'; // API endpoint
 $cobj = curl_init($url);
 
 //call the functions
-doGet($cobj);
+for ($i = 0; $i < 100; $i++) {
+    doGet($cobj);
+}
 
 function doGet($cobj)
 {
