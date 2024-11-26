@@ -1,6 +1,6 @@
 <?php include("connect.php"); ?>
 <?php
-$url = 'http://cluebase.lukelav.in/clues/random'; // API endpoint
+$url = 'http://cluebase.lukelav.in/clues/random';
 // Initialize cURL object
 $cobj = curl_init($url);
 

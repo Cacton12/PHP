@@ -60,7 +60,7 @@
     </div>
 </div>  
 <div class="row">
-    <label class="col-sm-2 control-label">Hint&nbsp;</label>  <!-- Added space for alignment -->
+    <label class="col-sm-2 control-label">Hint&nbsp;</label>
     <div class="col-sm-5">  
         <label id="lblHint"></label>&nbsp;<br>  
         <input type="button" onclick="ShowHint()" name="button" id="btnHint" value="Show Hint" class="btn btn-primary btn-sm login-button"/>
