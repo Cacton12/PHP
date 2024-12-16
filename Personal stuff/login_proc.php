@@ -4,26 +4,40 @@
 if (isset($_POST["username"], $_POST["password"])) { //only run this if the form was submitted via POST
     $password = $_POST["password"];
     $username = $_POST["username"];
-    AddRecord($con, $password, $username);
+    CheckUser($con, $password, $username);
 }
+function CheckUser($con, $password, $username) {
+    $sql = "SELECT * FROM `users` WHERE `Username` = ? AND `Password` = ?";
+    $stmt = mysqli_prepare($con, $sql);
 
-// Type-hinting will throw an exception if them type doesnt match
-function AddRecord($con, $password, $username) {
-    //insert statement
-    $sql = "INSERT INTO `users`(`Password`, `Username`) VALUES ('$password', '$username')";
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "ss", $username, $password);
 
-    //run the sql
-    mysqli_query($con, $sql);
-    if (mysqli_affected_rows($con) == 1) {
-        $msg = "Insert successful";
-        header("location:index.php?message=$msg");
-        exit();
+        // Execute the statement
+        mysqli_stmt_execute($stmt);
+
+        // Get the result
+        $result = mysqli_stmt_get_result($stmt);
+
+        if ($result && mysqli_num_rows($result) === 1) {
+            // Fetch the user record
+            $user = mysqli_fetch_assoc($result);
+
+            // Verify the password
+            if ($password == $user['Password']) {
+                header("Location: Notes_Proc.php");
+                exit();
+            } else {
+                $msg = "Invalid password.";
+            }
+        } else {
+            $msg = "User not found.";
+        }
+    } else {
+        $msg = "Database error: " . mysqli_error($con);
     }
-    else { //some kind of problem
-        $msg = "insert failed";
-    }
-    echo $msg;
-    //redirect the user back to the form
-    header("location:Practice_login.php?message=$msg");
+    mysqli_stmt_close($stmt);
+    header("Location: LoginPage.php?message=" . urlencode($msg));
+    exit();
 }
 ?>
