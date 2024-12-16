@@ -8,7 +8,7 @@ function getQuestion() {
     fetch("getQuestion.php")
         .then(response => response.json())
         .then(json => {
-            var perc = ((correct / total) * 100).toFixed(2);
+            
             Category = json.category
             Clue = json.question
             value = json.value
