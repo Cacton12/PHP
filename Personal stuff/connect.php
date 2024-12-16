@@ -3,7 +3,7 @@
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'practice database');
+define('DB_NAME', 'noteapp');
 // define('DB_NAME', 'productsdemo');
 	
 global $con;
